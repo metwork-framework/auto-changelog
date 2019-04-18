@@ -9,6 +9,7 @@ from collections import defaultdict
 
 class Tag:
     def __init__(self, name, date, commit):
+        self.raw_name = name
         self.name = 'Version ' + name if not name.lower().startswith('v') else name
         self._commit = commit
         self.date = datetime.datetime.fromtimestamp(date)

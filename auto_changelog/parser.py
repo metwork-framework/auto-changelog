@@ -37,8 +37,7 @@ def group_commits(tags, commits):
     return left_overs
 
 
-def traverse(base_dir, rev='master', keep_unreleased=True,
-             tag_filter_pattern="*"):
+def traverse(base_dir, rev='master', keep_unreleased=True):
     repo = git.Repo(base_dir)
     tags = repo.tags
 

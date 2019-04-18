@@ -6,7 +6,8 @@ Usage: auto-changelog [options]
 Options:
     -r=REPO --repo=REPO     Path to the repository's root directory [Default: .]
     -t=TITLE --title=TITLE  The changelog's title [Default: Changelog]
-    -t=REV --rev=REV        REV (see git-rev-parse) for commit listing [Default: master]
+    -r=REV --rev=REV        REV (see git-rev-parse) for commit listing [Default: master]
+    -T=REV --tag-filter=PAT tag filter pattern (see fnmatch) [Default: *]
     --dont-keep-unreleased  Don't keep unreleases commits
     -d=DESC --description=DESC
                             Your project's description
@@ -24,6 +25,7 @@ import os
 import sys
 
 import docopt
+import fnmatch
 
 from .parser import traverse
 from .generator import generate_changelog
@@ -52,12 +54,15 @@ def main():
         print('ERROR:', e)
         sys.exit(1)
 
+    tfp = args['--tag-filter']
+    new_tags = [x for x in tags if fnmatch.fnmatch(x.raw_name, tfp)]
+
     changelog = generate_changelog(
         template_dir=template_dir,
         title=args['--title'],
         description=args.get('--description'),
         unreleased=unreleased,
-        tags=tags)
+        tags=new_tags)
 
     # Get rid of some of those unnecessary newlines
     # changelog = changelog.replace('\n\n\n', '\n')
