@@ -6,14 +6,16 @@ Usage: auto-changelog [options]
 Options:
     -r=REPO --repo=REPO     Path to the repository's root directory [Default: .]
     -t=TITLE --title=TITLE  The changelog's title [Default: Changelog]
+    -t=REV --rev=REV        REV (see git-rev-parse) for commit listing [Default: master]
+    --dont-keep-unreleased  Don't keep unreleases commits
     -d=DESC --description=DESC
                             Your project's description
     -o=OUTFILE --output=OUTFILE
-                            The place to save the generated changelog 
+                            The place to save the generated changelog
                             [Default: CHANGELOG.md]
     -t=TEMPLATEDIR --template-dir=TEMPLATEDIR
                             The directory containing the templates used for
-                            rendering the changelog 
+                            rendering the changelog
     -h --help               Print this help text
     -V --version            Print the version number
 """
@@ -41,13 +43,18 @@ def main():
     # Convert the repository name to an absolute path
     repo = os.path.abspath(args['--repo'])
 
+    keep_unreleased = True
+    if args.get('--dont-keep-unreleased'):
+        keep_unreleased = False
+
     try:
         # Traverse the repository and group all commits to master by release
-        tags, unreleased = traverse(args['--repo'])
+        tags, unreleased = traverse(args['--repo'], rev=args['--rev'],
+                                    keep_unreleased=keep_unreleased)
     except ValueError as e:
         print('ERROR:', e)
         sys.exit(1)
-    
+
     changelog = generate_changelog(
             template_dir=template_dir,
             title=args['--title'],
