@@ -25,7 +25,7 @@ import sys
 
 import docopt
 
-from .parser import group_commits, traverse
+from .parser import traverse
 from .generator import generate_changelog
 from . import __version__
 
@@ -40,9 +40,6 @@ def main():
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         template_dir = os.path.join(BASE_DIR, 'templates')
 
-    # Convert the repository name to an absolute path
-    repo = os.path.abspath(args['--repo'])
-
     keep_unreleased = True
     if args.get('--dont-keep-unreleased'):
         keep_unreleased = False
@@ -56,17 +53,18 @@ def main():
         sys.exit(1)
 
     changelog = generate_changelog(
-            template_dir=template_dir,
-            title=args['--title'],
-            description=args.get('--description'),
-            unreleased=unreleased,
-            tags=tags)
+        template_dir=template_dir,
+        title=args['--title'],
+        description=args.get('--description'),
+        unreleased=unreleased,
+        tags=tags)
 
     # Get rid of some of those unnecessary newlines
     # changelog = changelog.replace('\n\n\n', '\n')
 
     with open(args['--output'], 'w') as f:
         f.write(changelog)
+
 
 if __name__ == "__main__":
     main()
