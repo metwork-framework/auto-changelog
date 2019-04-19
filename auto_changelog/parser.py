@@ -11,6 +11,10 @@ from .models import Commit, Tag, Unreleased
 
 
 def group_commits(tags, commits):
+
+    if len(tags) == 0:
+        return commits
+
     tags = sorted(tags, key=lambda t: t.date)
 
     # Adding the tag's commit manually because those seem to be skipped
@@ -41,9 +45,6 @@ def traverse(base_dir, rev='master', keep_unreleased=True,
         include_branches=['*'], exclude_branches=[], tag_filter='*'):
     repo = git.Repo(base_dir)
     tags = [x for x in repo.tags if fnmatch.fnmatch(x.name, tag_filter)]
-
-    if len(tags) < 1:
-        raise ValueError('Not enough tags to generate changelog')
 
     wrapped_tags = []
     for tagref in tags:
