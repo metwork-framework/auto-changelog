@@ -62,15 +62,14 @@ class Commit:
 
         if match:
             category, specific, description = match.groups()
-            specific = specific[1:-1] if specific else None # Remove surrounding brackets
+            # Remove surrounding brackets
+            specific = specific[1:-1] if specific else None
             return category, specific, description
         else:
             return None, None, None
-
 
     def __repr__(self):
         return '<{}: {} "{}">'.format(
                 self.__class__.__name__,
                 self.commit_hash[:7],
                 self.date.strftime('%x %X'))
-

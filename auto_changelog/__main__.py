@@ -4,11 +4,15 @@ Generage a changelog straight from your git commits.
 Usage: auto-changelog [options]
 
 Options:
-    -r=REPO --repo=REPO     Path to the repository's root directory [Default: .]
+    -r=REPO --repo=REPO
+        Path to the repository's root directory [Default: .]
     -t=TITLE --title=TITLE  The changelog's title [Default: Changelog]
-    -r=REV --rev=REV        REV (see git-rev-parse) for commit listing [Default: master]
-    --include-branches=BRA  comma separated fnmatch pattern for including branches [Default: *]
-    --exclude-branches=BRA  comma separated fnmatch pattern for excluding branches [Default:]
+    -r=REV --rev=REV
+        REV (see git-rev-parse) for commit listing [Default: master]
+    --include-branches=BRA
+        comma separated fnmatch pattern for including branches [Default: *]
+    --exclude-branches=BRA
+        comma separated fnmatch pattern for excluding branches [Default:]
     -T=REV --tag-filter=PAT tag filter pattern (see fnmatch) [Default: *]
     --dont-keep-unreleased  Don't keep unreleases commits
     -d=DESC --description=DESC
@@ -27,7 +31,6 @@ import os
 import sys
 
 import docopt
-import fnmatch
 
 from .parser import traverse
 from .generator import generate_changelog
